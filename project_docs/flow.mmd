@@ -1,0 +1,19 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffcc00', 'edgeLabelBackground':'#ffffff', 'tertiaryColor': '#fff0f0'}}}%%
+sequenceDiagram
+    participant U as User
+    participant UI as TripDetailsScreen
+    participant R as Riverpod (TripNotifier)
+    participant S as StorageService
+    participant H as Microphone (record)
+
+    U->>UI: Taps "Hold to Record"
+    UI->>H: record.start()
+    H-->>UI: Recording stream active
+    U->>UI: Releases button
+    UI->>H: record.stop()
+    H-->>UI: Returns local filePath (.m4a)
+    UI->>R: updateTrip(new AudioJournal)
+    R->>S: saveTrips(JSON)
+    S-->>R: Save confirmations
+    R-->>UI: Rebuilds UI with new tile
+    UI-->>U: Visual confirmation

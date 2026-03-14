@@ -1,0 +1,22 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffcc00', 'edgeLabelBackground':'#ffffff', 'tertiaryColor': '#fff0f0'}}}%%
+C4Context
+    title System Architecture: Travel App
+
+    Person(user, "Traveler", "A mobile user planning their trip")
+    
+    System_Boundary(app, "Travel App (Flutter)") {
+        Container(ui, "UI Layer", "Riverpod Consumers", "Displays trip data and forms")
+        Container(state, "State Layer", "Riverpod AsyncNotifiers", "Manages active trip state and business logic")
+        Container(storage, "Persistence Layer", "shared_preferences & dart:io", "Stores JSON schemas and File URIs")
+        Container(hardware, "Hardware Interfaces", "record & audioplayers", "Captures and plays audio buffers")
+    }
+
+    System_Ext(gemini, "Gemini API", "Generates translated survival phrases")
+    System_Ext(openweather, "OpenWeather API", "Fetches live weather for destinations")
+
+    Rel(user, ui, "Interacts with", "Touch")
+    Rel(ui, state, "Observes and Triggers", "Dart")
+    Rel(state, storage, "Reads/Writes", "JSON")
+    Rel(ui, hardware, "Triggers", "Platform Channels")
+    Rel(state, gemini, "Fetches from", "HTTPS/REST")
+    Rel(state, openweather, "Fetches from", "HTTPS/REST")
